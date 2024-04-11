@@ -5,3 +5,9 @@
 /.vs
 /DofusItemPriceExcel/obj/Debug
 /DofusItemPriceExcel/bin/Debug
+/DofusParchoPriceExcelPj/.vs
+/DofusParchoPriceExcelPj/bin/Debug/net7.0
+/DofusParchoPriceExcelPj/obj
+/DofusParchoPriceExcelPj/packages
+/DofusItemPriceExcelRunner/bin/Debug
+/DofusItemPriceExcelRunner/obj/Debug
