@@ -1,6 +1,7 @@
 ﻿using DofusItemPriceExcel.Objects;
 using DofusItemPriceExcelPj;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -13,7 +14,7 @@ namespace DofusItemPriceExcelRunner
         private bool runBtnEnabled;
 
         public ProgramRunner Runner { get; set; } = new ProgramRunner();
-        public string FilePath { get; set; }
+        private RunOptions RunOptions { get; set; }
         public bool RunBtnEnabled
         {
             get => runBtnEnabled;
@@ -25,7 +26,7 @@ namespace DofusItemPriceExcelRunner
         }
         public Action<bool> OnRunBtnValueChanged { get; set; }
         public Action OnWorkDone { get; set; }
-        public string BuySellTreshold { get; set; } = "15";
+        public string BuySellThreshold { get; set; } = "10";
 
         private string AppdataFilePath => AppdataDirectoryPath + AppdataFileName;
 
@@ -34,7 +35,19 @@ namespace DofusItemPriceExcelRunner
             OnRunBtnValueChanged = onRunBtnValueChanged;
             if(File.Exists(AppdataFilePath))
             {
-                FilePath = File.ReadAllText(AppdataFilePath);
+                try
+                {
+                    RunOptions = JsonConvert.DeserializeObject<RunOptions>(File.ReadAllText(AppdataFilePath));
+                    BuySellThreshold = $"{RunOptions.BuySellThresholdPercent}";
+                }
+                catch(JsonReaderException e)
+                {
+                    RunOptions = new RunOptions();
+                    if(e.Message.StartsWith("Unexpected character encountered while parsing value:"))
+                    {
+                        RunOptions.FilePath = File.ReadAllText(AppdataFilePath);
+                    }
+                }
                 RunBtnEnabled = true;
             }
         }
@@ -62,27 +75,24 @@ namespace DofusItemPriceExcelRunner
             };
             if(fileDialog.ShowDialog().Value)
             {
-                FilePath = fileDialog.FileName;
-                SaveChosenFilepath();
+                RunOptions.FilePath = fileDialog.FileName;
                 RunBtnEnabled = true;
             }
         }
 
-        private void SaveChosenFilepath()
+        private void SaveChosenOptions()
         {
             Directory.CreateDirectory(AppdataDirectoryPath);
-            File.WriteAllText(AppdataFilePath, FilePath);
+            File.WriteAllText(AppdataFilePath, JsonConvert.SerializeObject(RunOptions));
         }
 
         internal void OnRunButtonClicked()
         {
-            if(int.TryParse(BuySellTreshold, out int treshold))
+            if(int.TryParse(BuySellThreshold, out int threshold))
             {
-                Runner.Run(new RunOptions
-                {
-                    FilePath = FilePath,
-                    BuySellTresholdPercent = treshold
-                });
+                RunOptions.BuySellThresholdPercent = threshold;
+                SaveChosenOptions();
+                Runner.Run(RunOptions);
             }
             OnWorkDone?.Invoke();
         }

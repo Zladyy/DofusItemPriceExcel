@@ -1,4 +1,5 @@
 ﻿using DofusItemPriceExcel.Objects;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -14,12 +15,22 @@ namespace DofusItemPriceExcelPj
         {
             if(File.Exists(AppdataFilePath))
             {
-                var path = File.ReadAllText(AppdataFilePath);
-                var runner = new ProgramRunner();
-                runner.Run(new RunOptions
+                RunOptions options;
+                try
                 {
-                    FilePath = path
-                });
+                    options = JsonConvert.DeserializeObject<RunOptions>(File.ReadAllText(AppdataFilePath));
+                }
+                catch(JsonReaderException e)
+                {
+                    options = new RunOptions();
+                    if(e.Message.StartsWith("Unexpected character encountered while parsing value:"))
+                    {
+                        options.FilePath = File.ReadAllText(AppdataFilePath);
+                    }
+                }
+
+                var runner = new ProgramRunner();
+                runner.Run(options);
             }
         }
     }

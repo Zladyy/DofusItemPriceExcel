@@ -14,7 +14,7 @@ namespace DofusItemPriceExcelPj
 {
     public class ProgramRunner
     {
-        private int buySellTresholdPercent = 10;
+        private int buySellThresholdPercent = 10;
         private readonly int _colPerItem = 6;
         private int _colPerTab => _colPerItem + 1;
         private string _excelFilePath = "";
@@ -22,9 +22,9 @@ namespace DofusItemPriceExcelPj
         public void Run(RunOptions options)
         {
             _excelFilePath = options.FilePath;
-            if(options.BuySellTresholdPercent > 0)
+            if(options.BuySellThresholdPercent > 0)
             {
-                buySellTresholdPercent = options.BuySellTresholdPercent;
+                buySellThresholdPercent = options.BuySellThresholdPercent;
             }
             //Task whenPriceLoaded = new Task<object>((object obj) =>
             //{
@@ -235,8 +235,8 @@ namespace DofusItemPriceExcelPj
                 aggregatedSheet.Cells[3, 3 + _colPerTab * i] = "x1";
                 aggregatedSheet.Cells[3, 4 + _colPerTab * i] = "x10";
                 aggregatedSheet.Cells[3, 5 + _colPerTab * i] = "x10/10";
-                aggregatedSheet.Cells[3, 6 + _colPerTab * i] = $"Buy (Min + {buySellTresholdPercent}%)";
-                aggregatedSheet.Cells[3, 7 + _colPerTab * i] = $"Sell (Max - {buySellTresholdPercent}%)";
+                aggregatedSheet.Cells[3, 6 + _colPerTab * i] = $"Buy (Min + {buySellThresholdPercent}%)";
+                aggregatedSheet.Cells[3, 7 + _colPerTab * i] = $"Sell (Max - {buySellThresholdPercent}%)";
                 Range headersRange = aggregatedSheet.Range[aggregatedSheet.Cells[3, 2 + _colPerTab * i], aggregatedSheet.Cells[3, 7 + _colPerTab * i]];
                 headersRange.Font.Size = 13;
                 headersRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;
@@ -270,8 +270,8 @@ namespace DofusItemPriceExcelPj
                         var diff = maxPrice - minPrice;
 
 
-                        aggregatedSheet.Cells[4 + j, 6 + _colPerTab * i] = minPrice + (diff * buySellTresholdPercent / 100);
-                        aggregatedSheet.Cells[4 + j, 7 + _colPerTab * i] = maxPrice - (diff * buySellTresholdPercent / 100);
+                        aggregatedSheet.Cells[4 + j, 6 + _colPerTab * i] = minPrice + (diff * buySellThresholdPercent / 100);
+                        aggregatedSheet.Cells[4 + j, 7 + _colPerTab * i] = maxPrice - (diff * buySellThresholdPercent / 100);
                     }
 
                     //Spacing column
