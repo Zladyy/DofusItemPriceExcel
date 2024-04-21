@@ -25,8 +25,17 @@ namespace DofusItemPriceExcelRunner
         public Action<bool> OnRunBtnValueChanged { get; set; }
         public Action OnWorkDone { get; set; }
 
-
         private string AppdataFilePath => AppdataDirectoryPath + AppdataFileName;
+
+        public MainWindowController(Action<bool> onRunBtnValueChanged)
+        {
+            OnRunBtnValueChanged = onRunBtnValueChanged;
+            if(File.Exists(AppdataFilePath))
+            {
+                FilePath = File.ReadAllText(AppdataFilePath);
+                RunBtnEnabled = true;
+            }
+        }
 
         public void OnSelectBtnClicked()
         {

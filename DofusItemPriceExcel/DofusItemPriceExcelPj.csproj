@@ -55,6 +55,9 @@
     <Reference Include="MiniExcel, Version=1.31.3.0, Culture=neutral, PublicKeyToken=e7310002a53eac39, processorArchitecture=MSIL">
       <HintPath>..\DofusParchoPriceExcelPj\packages\MiniExcel.1.31.3\lib\net45\MiniExcel.dll</HintPath>
     </Reference>
+    <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\DofusParchoPriceExcelPj\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>

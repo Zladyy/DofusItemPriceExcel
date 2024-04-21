@@ -8,6 +8,7 @@ namespace DofusItemPriceExcelPj.Objects
         public DateTime Date { get; set; }
         public int Price1 { get; set; }
         public int Price10 { get; set; }
+        public int Price10On10 => (int)Math.Round(((decimal)Price10) / 10, 0);
 
         public override string ToString()
         {

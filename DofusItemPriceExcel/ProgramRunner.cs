@@ -5,24 +5,79 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DofusItemPriceExcelPj
 {
     public class ProgramRunner
     {
-        readonly int _colPerItem = 5;
+        private readonly int _colPerItem = 6;
+        private readonly int buySellTresholdPercent = 15;
+        private int _colPerTab => _colPerItem + 1;
         private string _excelFilePath = "";
 
         public void Run(string filepath)
         {
             _excelFilePath = filepath;
-            IList<PriceHistory> historyPerItem = GetPricesHistory();
+            //Task whenPriceLoaded = new Task<object>((object obj) =>
+            //{
+            //    IList<PriceHistory> historyPerItem = GetPricesHistoryFromExcelFile();
+            //    historyPerItem = AggregateData(historyPerItem);
+            //    WriteAggregatedSheetAndCharts(historyPerItem);
+            //});
+            //var a = Task.Run(GetPricesHistoryFromOnlineSource).Result;
+
+            IList<PriceHistory> historyPerItem = GetPricesHistoryFromExcelFile();
             historyPerItem = AggregateData(historyPerItem);
             WriteAggregatedSheetAndCharts(historyPerItem);
         }
 
-        private IList<PriceHistory> GetPricesHistory()
+        private async Task<object> GetPricesHistoryFromOnlineSource()
+        {
+            try
+            {
+                //TODO: Get price history from source :
+                //https://www.vulbis.com/?server=Draconiros&gids=&percent=0&craftableonly=false&select-type=76&sellchoice=false&buyqty=1&sellqty=1&percentsell=0
+                var client = new HttpClient();
+                var msg = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri("https://www.vulbis.com/?server=Draconiros&gids=&percent=0&craftableonly=false&select-type=76&sellchoice=false&buyqty=1&sellqty=1&percentsell=0"),
+                    Headers =
+                    {
+                        Referrer = new Uri("https://www.vulbis.com"),
+
+                    },
+                };
+                msg.Headers.UserAgent.Clear();
+
+                msg.Headers.Add("cf_clearance", "wgr9ErXKg9O9.Jzawy8o1llo.ISxlmI1lNR3xrvQ0hE-1713397708-1.0.1.1-aZ1_6c.rUHCjeiLh17I.ooQ265kAoDWOFfyLgEriLFmFFADAH_Kg7_r3qvWAZFs47FgMG12jCvz0ips3gCTHBw");
+                msg.Headers.Add("XeloriumServer", "Orukam");
+                msg.Headers.Add("SrambadServer", "Orukam");
+                msg.Headers.Add("EcaflipusServer", "Orukam");
+                msg.Headers.Add("EnutrosorServer", "Orukam");
+                msg.Headers.Add("BUY_QTY", "1");
+                msg.Headers.Add("SELL_QTY", "1");
+                msg.Headers.Add("PERCENT_SELL_CHOICE", "0");
+                msg.Headers.Add("SERVER_CHOICE", "Draconiros");
+                msg.Headers.Add("PERCENT_CHOICE", "0");
+                msg.Headers.Add("TYPE", "76");
+                var response = await client.SendAsync(msg);
+                var str = await response.Content.ReadAsStringAsync();
+            }
+            catch
+            {
+
+            }
+
+
+
+            return null;
+        }
+
+        private IList<PriceHistory> GetPricesHistoryFromExcelFile()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -42,11 +97,13 @@ namespace DofusItemPriceExcelPj
                             if(!(row.ItemArray[j] is DBNull))
                             {
                                 var elem = histories[j / 4];
+                                var valPrice1 = row.ItemArray[j + 1];
+                                var valPrice10 = row.ItemArray[j + 2];
                                 elem.PriceValues.Add(new PriceOccurence
                                 {
                                     Date = (DateTime)(row.ItemArray[j] ?? DateTime.MinValue),
-                                    Price1 = (int)(double)(row.ItemArray[j + 1] ?? 0),
-                                    Price10 = (int)(double)(row.ItemArray[j + 2] ?? 0)
+                                    Price1 = (int)(double)((valPrice1 is DBNull) ? 0d : valPrice1),
+                                    Price10 = (int)(double)((valPrice10 is DBNull) ? 0d : valPrice10)
                                 });
                             }
                         }
@@ -112,6 +169,7 @@ namespace DofusItemPriceExcelPj
             return result;
         }
 
+
         private void WriteAggregatedSheetAndCharts(IEnumerable<PriceHistory> histories)
         {
             var excelApp = new Application
@@ -122,8 +180,8 @@ namespace DofusItemPriceExcelPj
             };
             var book = excelApp.Workbooks.Open(_excelFilePath);
             var aggregatedSheet = WriteAggregatedSheet(book, histories);
-            GenerateCharts(book, aggregatedSheet, histories);
-            aggregatedSheet.Activate();
+            var chartSheet = GenerateCharts(book, aggregatedSheet, histories);
+            chartSheet.Activate();
         }
 
         private _Worksheet WriteAggregatedSheet(Workbook book, IEnumerable<PriceHistory> histories)
@@ -158,8 +216,8 @@ namespace DofusItemPriceExcelPj
                 var history = histories.ElementAt(i);
 
                 //Set item label
-                Range titleRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerItem * i], aggregatedSheet.Cells[2, _colPerItem + _colPerItem * i]];
-                aggregatedSheet.Cells[2, 2 + _colPerItem * i] = history.Label;
+                Range titleRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerTab * i], aggregatedSheet.Cells[2, _colPerTab + _colPerTab * i]];
+                aggregatedSheet.Cells[2, 2 + _colPerTab * i] = history.Label;
 
                 //Merge and center title cells
                 titleRange.Merge();
@@ -168,37 +226,59 @@ namespace DofusItemPriceExcelPj
                 titleRange.Font.Size = 16;
 
                 //Set headers
-                aggregatedSheet.Cells[3, 2 + _colPerItem * i] = "Date";
-                aggregatedSheet.Cells[3, 3 + _colPerItem * i] = "x1";
-                aggregatedSheet.Cells[3, 4 + _colPerItem * i] = "x10";
-                aggregatedSheet.Cells[3, 5 + _colPerItem * i] = "x10/10";
-                Range headersRange = aggregatedSheet.Range[aggregatedSheet.Cells[3, 2 + _colPerItem * i], aggregatedSheet.Cells[3, 5 + _colPerItem * i]];
+                aggregatedSheet.Cells[3, 2 + _colPerTab * i] = "Date";
+                aggregatedSheet.Cells[3, 3 + _colPerTab * i] = "x1";
+                aggregatedSheet.Cells[3, 4 + _colPerTab * i] = "x10";
+                aggregatedSheet.Cells[3, 5 + _colPerTab * i] = "x10/10";
+                aggregatedSheet.Cells[3, 6 + _colPerTab * i] = $"Buy (Min + {buySellTresholdPercent}%)";
+                aggregatedSheet.Cells[3, 7 + _colPerTab * i] = $"Sell (Max - {buySellTresholdPercent}%)";
+                Range headersRange = aggregatedSheet.Range[aggregatedSheet.Cells[3, 2 + _colPerTab * i], aggregatedSheet.Cells[3, 7 + _colPerTab * i]];
                 headersRange.Font.Size = 13;
                 headersRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;
 
-                //Write price values
+                //Write price values rows
                 for(int j = 0; j < history.PriceValues.Count; j++)
                 {
                     var price = history.PriceValues[j];
-                    aggregatedSheet.Cells[4 + j, 2 + _colPerItem * i] = price.Date;
+
+                    //Date
+                    aggregatedSheet.Cells[4 + j, 2 + _colPerTab * i] = price.Date;
+
+                    //x1
                     if(price.Price1 != 0)
                     {
-                        aggregatedSheet.Cells[4 + j, 3 + _colPerItem * i] = price.Price1;
+                        aggregatedSheet.Cells[4 + j, 3 + _colPerTab * i] = price.Price1;
                     }
+
+                    //x10 & x10/10
                     if(price.Price10 != 0)
                     {
-                        aggregatedSheet.Cells[4 + j, 4 + _colPerItem * i] = price.Price10;
-                        aggregatedSheet.Cells[4 + j, 5 + _colPerItem * i] = Math.Round(((decimal)price.Price10) / 10, 0);
+                        aggregatedSheet.Cells[4 + j, 4 + _colPerTab * i] = price.Price10;
+                        aggregatedSheet.Cells[4 + j, 5 + _colPerTab * i] = price.Price10On10;
                     }
-                    aggregatedSheet.Cells[4 + j, 6 + _colPerItem * i].ColumnWidth = 1;
+
+                    //Min/Max
+                    if(history.MinPrice != 0)
+                    {
+                        var minPrice = history.MinPrice;
+                        var maxPrice = history.MaxPrice;
+                        var diff = maxPrice - minPrice;
+
+
+                        aggregatedSheet.Cells[4 + j, 6 + _colPerTab * i] = minPrice + (diff * buySellTresholdPercent / 100);
+                        aggregatedSheet.Cells[4 + j, 7 + _colPerTab * i] = maxPrice - (diff * buySellTresholdPercent / 100);
+                    }
+
+                    //Spacing column
+                    aggregatedSheet.Cells[4 + j, 8 + _colPerTab * i].ColumnWidth = 1;
                 }
 
                 //Set date format
-                Range datesRange = aggregatedSheet.Range[aggregatedSheet.Cells[4, 2 + _colPerItem * i], aggregatedSheet.Cells[3 + history.PriceValues.Count, 2 + _colPerItem * i]];
+                Range datesRange = aggregatedSheet.Range[aggregatedSheet.Cells[4, 2 + _colPerTab * i], aggregatedSheet.Cells[3 + history.PriceValues.Count, 2 + _colPerTab * i]];
                 datesRange.NumberFormat = "DD/MM/YYYY";
 
                 //Set borders
-                Range wholeItemRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerItem * i], aggregatedSheet.Cells[3 + history.PriceValues.Count, 5 + _colPerItem * i]];
+                Range wholeItemRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerTab * i], aggregatedSheet.Cells[3 + history.PriceValues.Count, 7 + _colPerTab * i]];
                 Borders borders1 = wholeItemRange.Borders;
 
                 //All borders
@@ -216,7 +296,7 @@ namespace DofusItemPriceExcelPj
             return aggregatedSheet;
         }
 
-        private void GenerateCharts(Workbook book, _Worksheet aggregatedSheet, IEnumerable<PriceHistory> histories)
+        private _Worksheet GenerateCharts(Workbook book, _Worksheet aggregatedSheet, IEnumerable<PriceHistory> histories)
         {
             var sheets = book.Sheets;
             _Worksheet chartsSheet = sheets.Add(After: aggregatedSheet);
@@ -239,7 +319,7 @@ namespace DofusItemPriceExcelPj
                 ChartObject myChart = xlCharts.Add(left, top, width, height);
                 Chart chartPage = myChart.Chart;
 
-                var colMult = _colPerItem * i;
+                var colMult = _colPerTab * i;
                 var dateAndPricesRange =
                     $"{GetAlphabetLetterForColumn(1 + colMult)}{3}" +
                     ":" +
@@ -247,7 +327,7 @@ namespace DofusItemPriceExcelPj
                     ";" +
                     $"{GetAlphabetLetterForColumn(4 + colMult)}{3}" +
                     ":" +
-                    $"{GetAlphabetLetterForColumn(4 + colMult)}{3 + history.PriceValues.Count}";
+                    $"{GetAlphabetLetterForColumn(6 + colMult)}{3 + history.PriceValues.Count}";
 
                 string GetAlphabetLetterForColumn(int column)
                 {
@@ -276,7 +356,35 @@ namespace DofusItemPriceExcelPj
                 chartPage.ChartTitle.Text = history.Label;
                 chartPage.ChartType = XlChartType.xlLine;
                 chartPage.DisplayBlanksAs = XlDisplayBlanksAs.xlInterpolated;
+
+                Series x1Serie = chartPage.FullSeriesCollection(1);
+                x1Serie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbPurple;
+                x1Serie.Format.Line.Weight = 2f;
+
+                Series x10On10Serie = chartPage.FullSeriesCollection(2);
+                x10On10Serie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbDarkTurquoise;
+                x10On10Serie.Format.Line.Weight = 2f;
+
+                Series minSerie = chartPage.FullSeriesCollection(3);
+                minSerie.Name = "Buy";
+                minSerie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbGreen;
+                minSerie.Format.Line.Weight = 1f;
+
+                Series maxSerie = chartPage.FullSeriesCollection(4);
+                maxSerie.Name = "Sell";
+                maxSerie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbRed;
+                maxSerie.Format.Line.Weight = 1;
+
+
+                var minValHistory = history.PriceValues.Where(x => x.Price1 != 0).Select(x => x.Price1)
+                    .Union(history.PriceValues.Where(x => x.Price10On10 != 0).Select(x => x.Price10On10))
+                    .Min();
+                double minValHistoryRounded = minValHistory - (minValHistory % 1000);
+
+                chartPage.Axes(XlAxisType.xlValue).MinimumScale = minValHistoryRounded;
             }
+
+            return chartsSheet;
         }
     }
 }

@@ -12,11 +12,10 @@ namespace DofusItemPriceExcelRunner
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowController();
-            ViewModel.OnRunBtnValueChanged += delegate (bool value)
+            DataContext = new MainWindowController(delegate (bool value)
             {
                 RunBtn.IsEnabled = value;
-            };
+            });
             ViewModel.OnWorkDone += delegate
             {
                 Close();
