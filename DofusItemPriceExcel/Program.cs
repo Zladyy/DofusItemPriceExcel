@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DofusItemPriceExcel.Objects;
+using System;
 using System.IO;
 
 namespace DofusItemPriceExcelPj
@@ -15,7 +16,10 @@ namespace DofusItemPriceExcelPj
             {
                 var path = File.ReadAllText(AppdataFilePath);
                 var runner = new ProgramRunner();
-                runner.Run(path);
+                runner.Run(new RunOptions
+                {
+                    FilePath = path
+                });
             }
         }
     }

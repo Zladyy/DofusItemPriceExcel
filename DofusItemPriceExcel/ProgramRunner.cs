@@ -1,4 +1,5 @@
-﻿using DofusItemPriceExcelPj.Objects;
+﻿using DofusItemPriceExcel.Objects;
+using DofusItemPriceExcelPj.Objects;
 using ExcelDataReader;
 using Microsoft.Office.Interop.Excel;
 using System;
@@ -13,14 +14,18 @@ namespace DofusItemPriceExcelPj
 {
     public class ProgramRunner
     {
+        private int buySellTresholdPercent = 10;
         private readonly int _colPerItem = 6;
-        private readonly int buySellTresholdPercent = 15;
         private int _colPerTab => _colPerItem + 1;
         private string _excelFilePath = "";
 
-        public void Run(string filepath)
+        public void Run(RunOptions options)
         {
-            _excelFilePath = filepath;
+            _excelFilePath = options.FilePath;
+            if(options.BuySellTresholdPercent > 0)
+            {
+                buySellTresholdPercent = options.BuySellTresholdPercent;
+            }
             //Task whenPriceLoaded = new Task<object>((object obj) =>
             //{
             //    IList<PriceHistory> historyPerItem = GetPricesHistoryFromExcelFile();

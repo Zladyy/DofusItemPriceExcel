@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Objects\PriceHistory.cs" />
     <Compile Include="Objects\PriceOccurence.cs" />
+    <Compile Include="Objects\RunOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace DofusItemPriceExcelRunner
 {
@@ -7,6 +8,7 @@ namespace DofusItemPriceExcelRunner
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly Regex _numbersOnlyRegex = new Regex("[^0-9.-]+"); //regex that allows only numbers
         private MainWindowController ViewModel => DataContext as MainWindowController;
 
         public MainWindow()
@@ -30,6 +32,16 @@ namespace DofusItemPriceExcelRunner
         private void RunButton_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.OnRunButtonClicked();
+        }
+
+        private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = !IsTextAllowed(e.Text);
+        }
+
+        private static bool IsTextAllowed(string text)
+        {
+            return !_numbersOnlyRegex.IsMatch(text);
         }
     }
 }

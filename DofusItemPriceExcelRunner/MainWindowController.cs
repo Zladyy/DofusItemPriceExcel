@@ -1,4 +1,5 @@
-﻿using DofusItemPriceExcelPj;
+﻿using DofusItemPriceExcel.Objects;
+using DofusItemPriceExcelPj;
 using Microsoft.Win32;
 using System;
 using System.IO;
@@ -24,6 +25,7 @@ namespace DofusItemPriceExcelRunner
         }
         public Action<bool> OnRunBtnValueChanged { get; set; }
         public Action OnWorkDone { get; set; }
+        public string BuySellTreshold { get; set; } = "15";
 
         private string AppdataFilePath => AppdataDirectoryPath + AppdataFileName;
 
@@ -74,7 +76,14 @@ namespace DofusItemPriceExcelRunner
 
         internal void OnRunButtonClicked()
         {
-            Runner.Run(FilePath);
+            if(int.TryParse(BuySellTreshold, out int treshold))
+            {
+                Runner.Run(new RunOptions
+                {
+                    FilePath = FilePath,
+                    BuySellTresholdPercent = treshold
+                });
+            }
             OnWorkDone?.Invoke();
         }
     }
