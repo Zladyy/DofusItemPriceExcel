@@ -52,6 +52,10 @@ namespace DofusItemPriceExcelRunner
                 }
                 RunBtnEnabled = true;
             }
+            else
+            {
+                RunOptions = new RunOptions();
+            }
         }
 
         public void OnSelectBtnClicked()

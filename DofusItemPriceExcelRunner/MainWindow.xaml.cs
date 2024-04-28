@@ -40,7 +40,7 @@ namespace DofusItemPriceExcelRunner
             e.Handled = !IsTextAllowed(e.Text);
             if(!e.Handled
                 && sender is TextBox tb
-                && int.TryParse(string.Concat(tb.Text, e.Text), out var parsed)
+                && int.TryParse(string.Concat(!string.IsNullOrEmpty(tb.SelectedText) ? tb.Text.Replace(tb.SelectedText, "") : tb.Text, e.Text), out var parsed)
                 && (parsed < 0 || parsed > 100))
             {
                 e.Handled = true;
