@@ -14,18 +14,17 @@ namespace DofusItemPriceExcelPj
 {
     public class ProgramRunner
     {
-        private int buySellThresholdPercent = 10;
-        private readonly int _colPerItem = 6;
+        private int buySellThresholdPercent;
+        private bool useBuySellThreshold => buySellThresholdPercent > 0;
+        private int _colPerItem => 4
+            + (useBuySellThreshold ? 2 : 0);
         private int _colPerTab => _colPerItem + 1;
         private string _excelFilePath = "";
 
         public void Run(RunOptions options)
         {
             _excelFilePath = options.FilePath;
-            if(options.BuySellThresholdPercent > 0)
-            {
-                buySellThresholdPercent = options.BuySellThresholdPercent;
-            }
+            buySellThresholdPercent = options.BuySellThresholdPercent;
             //Task whenPriceLoaded = new Task<object>((object obj) =>
             //{
             //    IList<PriceHistory> historyPerItem = GetPricesHistoryFromExcelFile();
@@ -39,48 +38,48 @@ namespace DofusItemPriceExcelPj
             WriteAggregatedSheetAndCharts(historyPerItem);
         }
 
-        private async Task<object> GetPricesHistoryFromOnlineSource()
-        {
-            try
-            {
-                //TODO: Get price history from source :
-                //https://www.vulbis.com/?server=Draconiros&gids=&percent=0&craftableonly=false&select-type=76&sellchoice=false&buyqty=1&sellqty=1&percentsell=0
-                var client = new HttpClient();
-                var msg = new HttpRequestMessage()
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri("https://www.vulbis.com/?server=Draconiros&gids=&percent=0&craftableonly=false&select-type=76&sellchoice=false&buyqty=1&sellqty=1&percentsell=0"),
-                    Headers =
-                    {
-                        Referrer = new Uri("https://www.vulbis.com"),
+        //private async Task<object> GetPricesHistoryFromOnlineSource()
+        //{
+        //    try
+        //    {
+        //        //TODO: Get price history from source :
+        //        //https://www.vulbis.com/?server=Draconiros&gids=&percent=0&craftableonly=false&select-type=76&sellchoice=false&buyqty=1&sellqty=1&percentsell=0
+        //        var client = new HttpClient();
+        //        var msg = new HttpRequestMessage()
+        //        {
+        //            Method = HttpMethod.Get,
+        //            RequestUri = new Uri("https://www.vulbis.com/?server=Draconiros&gids=&percent=0&craftableonly=false&select-type=76&sellchoice=false&buyqty=1&sellqty=1&percentsell=0"),
+        //            Headers =
+        //            {
+        //                Referrer = new Uri("https://www.vulbis.com"),
 
-                    },
-                };
-                msg.Headers.UserAgent.Clear();
+        //            },
+        //        };
+        //        msg.Headers.UserAgent.Clear();
 
-                msg.Headers.Add("cf_clearance", "wgr9ErXKg9O9.Jzawy8o1llo.ISxlmI1lNR3xrvQ0hE-1713397708-1.0.1.1-aZ1_6c.rUHCjeiLh17I.ooQ265kAoDWOFfyLgEriLFmFFADAH_Kg7_r3qvWAZFs47FgMG12jCvz0ips3gCTHBw");
-                msg.Headers.Add("XeloriumServer", "Orukam");
-                msg.Headers.Add("SrambadServer", "Orukam");
-                msg.Headers.Add("EcaflipusServer", "Orukam");
-                msg.Headers.Add("EnutrosorServer", "Orukam");
-                msg.Headers.Add("BUY_QTY", "1");
-                msg.Headers.Add("SELL_QTY", "1");
-                msg.Headers.Add("PERCENT_SELL_CHOICE", "0");
-                msg.Headers.Add("SERVER_CHOICE", "Draconiros");
-                msg.Headers.Add("PERCENT_CHOICE", "0");
-                msg.Headers.Add("TYPE", "76");
-                var response = await client.SendAsync(msg);
-                var str = await response.Content.ReadAsStringAsync();
-            }
-            catch
-            {
+        //        msg.Headers.Add("cf_clearance", "wgr9ErXKg9O9.Jzawy8o1llo.ISxlmI1lNR3xrvQ0hE-1713397708-1.0.1.1-aZ1_6c.rUHCjeiLh17I.ooQ265kAoDWOFfyLgEriLFmFFADAH_Kg7_r3qvWAZFs47FgMG12jCvz0ips3gCTHBw");
+        //        msg.Headers.Add("XeloriumServer", "Orukam");
+        //        msg.Headers.Add("SrambadServer", "Orukam");
+        //        msg.Headers.Add("EcaflipusServer", "Orukam");
+        //        msg.Headers.Add("EnutrosorServer", "Orukam");
+        //        msg.Headers.Add("BUY_QTY", "1");
+        //        msg.Headers.Add("SELL_QTY", "1");
+        //        msg.Headers.Add("PERCENT_SELL_CHOICE", "0");
+        //        msg.Headers.Add("SERVER_CHOICE", "Draconiros");
+        //        msg.Headers.Add("PERCENT_CHOICE", "0");
+        //        msg.Headers.Add("TYPE", "76");
+        //        var response = await client.SendAsync(msg);
+        //        var str = await response.Content.ReadAsStringAsync();
+        //    }
+        //    catch
+        //    {
 
-            }
+        //    }
 
 
 
-            return null;
-        }
+        //    return null;
+        //}
 
         private IList<PriceHistory> GetPricesHistoryFromExcelFile()
         {
@@ -92,9 +91,9 @@ namespace DofusItemPriceExcelPj
                 {
                     var dataSet = reader.AsDataSet();
                     var dataTable = dataSet.Tables[0];
-                    var histories = dataTable.Rows[1].ItemArray.Where(x => !(x is DBNull)).Distinct().Select(x => new PriceHistory { Label = x?.ToString() ?? string.Empty }).ToList();
+                    var histories = dataTable.Rows[0].ItemArray.Where(x => !(x is DBNull)).Distinct().Select(x => new PriceHistory { Label = x?.ToString() ?? string.Empty }).ToList();
 
-                    for(int i = 3; i < dataTable.Rows.Count; i++)
+                    for(int i = 2; i < dataTable.Rows.Count; i++)
                     {
                         var row = dataTable.Rows[i];
                         for(int j = 1; j < row.ItemArray.Length; j += 4)
@@ -186,6 +185,7 @@ namespace DofusItemPriceExcelPj
             var book = excelApp.Workbooks.Open(_excelFilePath);
             var aggregatedSheet = WriteAggregatedSheet(book, histories);
             var chartSheet = GenerateCharts(book, aggregatedSheet, histories);
+            aggregatedSheet.Visible = XlSheetVisibility.xlSheetVeryHidden;
             chartSheet.Activate();
         }
 
@@ -221,7 +221,7 @@ namespace DofusItemPriceExcelPj
                 var history = histories.ElementAt(i);
 
                 //Set item label
-                Range titleRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerTab * i], aggregatedSheet.Cells[2, _colPerTab + _colPerTab * i]];
+                Range titleRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerTab * i], aggregatedSheet.Cells[2, _colPerTab * (i + 1)]];
                 aggregatedSheet.Cells[2, 2 + _colPerTab * i] = history.Label;
 
                 //Merge and center title cells
@@ -235,9 +235,12 @@ namespace DofusItemPriceExcelPj
                 aggregatedSheet.Cells[3, 3 + _colPerTab * i] = "x1";
                 aggregatedSheet.Cells[3, 4 + _colPerTab * i] = "x10";
                 aggregatedSheet.Cells[3, 5 + _colPerTab * i] = "x10/10";
-                aggregatedSheet.Cells[3, 6 + _colPerTab * i] = $"Buy (Min + {buySellThresholdPercent}%)";
-                aggregatedSheet.Cells[3, 7 + _colPerTab * i] = $"Sell (Max - {buySellThresholdPercent}%)";
-                Range headersRange = aggregatedSheet.Range[aggregatedSheet.Cells[3, 2 + _colPerTab * i], aggregatedSheet.Cells[3, 7 + _colPerTab * i]];
+                if(useBuySellThreshold)
+                {
+                    aggregatedSheet.Cells[3, 6 + _colPerTab * i] = $"Buy (Min + {buySellThresholdPercent}%)";
+                    aggregatedSheet.Cells[3, 7 + _colPerTab * i] = $"Sell (Max - {buySellThresholdPercent}%)";
+                }
+                Range headersRange = aggregatedSheet.Range[aggregatedSheet.Cells[3, 2 + _colPerTab * i], aggregatedSheet.Cells[3, _colPerTab * (i + 1)]];
                 headersRange.Font.Size = 13;
                 headersRange.HorizontalAlignment = XlHAlign.xlHAlignCenter;
 
@@ -263,7 +266,7 @@ namespace DofusItemPriceExcelPj
                     }
 
                     //Min/Max
-                    if(history.MinPrice != 0)
+                    if(useBuySellThreshold && history.MinPrice != 0)
                     {
                         var minPrice = history.MinPrice;
                         var maxPrice = history.MaxPrice;
@@ -275,7 +278,7 @@ namespace DofusItemPriceExcelPj
                     }
 
                     //Spacing column
-                    aggregatedSheet.Cells[4 + j, 8 + _colPerTab * i].ColumnWidth = 1;
+                    aggregatedSheet.Cells[4 + j, 1 + _colPerTab * (i + 1)].ColumnWidth = 1;
                 }
 
                 //Set date format
@@ -283,7 +286,7 @@ namespace DofusItemPriceExcelPj
                 datesRange.NumberFormat = "DD/MM/YYYY";
 
                 //Set borders
-                Range wholeItemRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerTab * i], aggregatedSheet.Cells[3 + history.PriceValues.Count, 7 + _colPerTab * i]];
+                Range wholeItemRange = aggregatedSheet.Range[aggregatedSheet.Cells[2, 2 + _colPerTab * i], aggregatedSheet.Cells[3 + history.PriceValues.Count, _colPerTab * (i + 1)]];
                 Borders borders1 = wholeItemRange.Borders;
 
                 //All borders
@@ -332,7 +335,7 @@ namespace DofusItemPriceExcelPj
                     ";" +
                     $"{GetAlphabetLetterForColumn(4 + colMult)}{3}" +
                     ":" +
-                    $"{GetAlphabetLetterForColumn(6 + colMult)}{3 + history.PriceValues.Count}";
+                    $"{GetAlphabetLetterForColumn(4 + colMult + (useBuySellThreshold ? 2 : 0))}{3 + history.PriceValues.Count}";
 
                 string GetAlphabetLetterForColumn(int column)
                 {
@@ -370,16 +373,18 @@ namespace DofusItemPriceExcelPj
                 x10On10Serie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbDarkTurquoise;
                 x10On10Serie.Format.Line.Weight = 2f;
 
-                Series minSerie = chartPage.FullSeriesCollection(3);
-                minSerie.Name = "Buy";
-                minSerie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbGreen;
-                minSerie.Format.Line.Weight = 1f;
+                if(useBuySellThreshold)
+                {
+                    Series minSerie = chartPage.FullSeriesCollection(3);
+                    minSerie.Name = "Buy";
+                    minSerie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbGreen;
+                    minSerie.Format.Line.Weight = 1f;
 
-                Series maxSerie = chartPage.FullSeriesCollection(4);
-                maxSerie.Name = "Sell";
-                maxSerie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbRed;
-                maxSerie.Format.Line.Weight = 1;
-
+                    Series maxSerie = chartPage.FullSeriesCollection(4);
+                    maxSerie.Name = "Sell";
+                    maxSerie.Format.Line.ForeColor.RGB = (int)XlRgbColor.rgbRed;
+                    maxSerie.Format.Line.Weight = 1;
+                }
 
                 var minValHistory = history.PriceValues.Where(x => x.Price1 != 0).Select(x => x.Price1)
                     .Union(history.PriceValues.Where(x => x.Price10On10 != 0).Select(x => x.Price10On10))

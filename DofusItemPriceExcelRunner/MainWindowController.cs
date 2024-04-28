@@ -14,7 +14,8 @@ namespace DofusItemPriceExcelRunner
         private bool runBtnEnabled;
 
         public ProgramRunner Runner { get; set; } = new ProgramRunner();
-        private RunOptions RunOptions { get; set; }
+        public bool SeuilBuySellChecked { get; set; }
+        public RunOptions RunOptions { get; set; }
         public bool RunBtnEnabled
         {
             get => runBtnEnabled;
@@ -39,6 +40,7 @@ namespace DofusItemPriceExcelRunner
                 {
                     RunOptions = JsonConvert.DeserializeObject<RunOptions>(File.ReadAllText(AppdataFilePath));
                     BuySellThreshold = $"{RunOptions.BuySellThresholdPercent}";
+                    SeuilBuySellChecked = RunOptions.BuySellThresholdPercent != 0;
                 }
                 catch(JsonReaderException e)
                 {
@@ -55,9 +57,23 @@ namespace DofusItemPriceExcelRunner
         public void OnSelectBtnClicked()
         {
             string path;
+
             if(File.Exists(AppdataFilePath))
             {
-                path = File.ReadAllText(AppdataFilePath);
+                RunOptions options;
+                try
+                {
+                    options = JsonConvert.DeserializeObject<RunOptions>(File.ReadAllText(AppdataFilePath));
+                }
+                catch(JsonReaderException e)
+                {
+                    options = new RunOptions();
+                    if(e.Message.StartsWith("Unexpected character encountered while parsing value:"))
+                    {
+                        options.FilePath = File.ReadAllText(AppdataFilePath);
+                    }
+                }
+                path = options.FilePath;
             }
             else
             {
@@ -88,12 +104,19 @@ namespace DofusItemPriceExcelRunner
 
         internal void OnRunButtonClicked()
         {
-            if(int.TryParse(BuySellThreshold, out int threshold))
+            if(SeuilBuySellChecked)
             {
-                RunOptions.BuySellThresholdPercent = threshold;
-                SaveChosenOptions();
-                Runner.Run(RunOptions);
+                if(int.TryParse(BuySellThreshold, out int threshold))
+                {
+                    RunOptions.BuySellThresholdPercent = threshold;
+                }
             }
+            else
+            {
+                RunOptions.BuySellThresholdPercent = 0;
+            }
+            SaveChosenOptions();
+            Runner.Run(RunOptions);
             OnWorkDone?.Invoke();
         }
     }
