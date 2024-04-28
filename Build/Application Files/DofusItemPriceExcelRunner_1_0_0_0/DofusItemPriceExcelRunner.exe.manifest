@@ -42,26 +42,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DofusItemPriceExcel.exe" size="28672">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DofusItemPriceExcel.exe" size="35840">
       <assemblyIdentity name="DofusItemPriceExcel" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>TJkXDQJQbb8Fs68j+SROyJ0XaLpcX56DhH6z01Zygys=</dsig:DigestValue>
+        <dsig:DigestValue>jxIH4YjVTEneorwP7p21xZE4yhsJtadGEFAqW2fJYDE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DofusItemPriceExcelRunner.exe" size="13256">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DofusItemPriceExcelRunner.exe" size="17864">
       <assemblyIdentity name="DofusItemPriceExcelRunner" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>mUTeomyIQ+K5xLhWcDn9DGZC4BVY6UBHI4RGBtMcJCc=</dsig:DigestValue>
+        <dsig:DigestValue>gtFHxz7xdmGeQr8BPguMv3GlPf6qWSIEwea++hXh7p8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -86,6 +86,18 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>psiBU4wfpUbJxmD6JqL31nw+5BVamxZsMedAftxtvHI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="711952">
+      <assemblyIdentity name="Newtonsoft.Json" version="13.0.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>4eJ697B+7t9c5xqSVfBCKBam/FhJpIPGcU4bRyBE+p0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -149,13 +161,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="DofusItemPriceExcelRunner.exe.config" size="553">
+  <file name="DofusItemPriceExcelRunner.exe.config" size="565">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>BCIDgLX2S6u+4Gqe76EKcOJVyv4Iw6QwMjCLu/Ot0nw=</dsig:DigestValue>
+      <dsig:DigestValue>M10x5vOrJ1YAWNm7AQZ4j6DfrJODtUsTjzpH9Kz9yeg=</dsig:DigestValue>
     </hash>
   </file>
-<publisherIdentity name="CN=PC-TOMBEUX\Maxime" issuerKeyHash="a98d8ce2a2e1ca3b9187c1987b93bdace1a4f4c1" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>dkJfMZyK6n59Tr0Hwo1eZ83V/HuFxAm3mFGj/K6oh7c=</DigestValue></Reference></SignedInfo><SignatureValue>DafE/fugiD9NBJU6GC6yY5wjK43gIG8y1SilSazbxeTvcSGHvzD6pkilVUNGNL+lT/vwYkQpASXrqlcQWWpQIzPeSijioph0eZUQW1WCClqslHnhLbayaq4O9fAPW15ZZYkDar9Cx2TV4MJ/qrdlXqSgNXbGC3Ir2hEAJd1ZSK4=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>unUjdD/mN1tTteLTB8/ih5ahAuHDw/wxfb5N+mT52Eq2rMaoGQuYNl0/WIVcovEoccP33o5knv2zYOEMdfoc03pjut1jafsj1Xg0vXrL/giu5tMJWBpdgVWqW5KnUlB9GTBB8AzbGOrrvN2M24r9L5F/taqWqojfLyESr8Q9W5E=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="b787a8aefca35198b709c4857bfcd5cd675e8dc207bd4e7d7eea8a9c315f4276" Description="" Url=""><as:assemblyIdentity name="DofusItemPriceExcelRunner.exe" version="1.0.0.0" publicKeyToken="91c1589412c435f2" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=PC-TOMBEUX\Maxime</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>LbALwHGaV0KmfcsLfExQKpdaXdkaRjcUTfg8K65lyMg=</DigestValue></Reference></SignedInfo><SignatureValue>T+4rGGT+FmdjBMjsCHoL5aUwOTdrA8bEqkJTmuXsbYf9VihFsV58GD2SckSEXUGVgdGorsaUgwA/mbcuuUiP42qy0kpp0kxF6ikk7ccsJfUhf2FdDjIxItk5+genNN7hV/oRSyLscjlvr3PKz0epc+/9SOSBZpNBMS/orkltLPA=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>unUjdD/mN1tTteLTB8/ih5ahAuHDw/wxfb5N+mT52Eq2rMaoGQuYNl0/WIVcovEoccP33o5knv2zYOEMdfoc03pjut1jafsj1Xg0vXrL/giu5tMJWBpdgVWqW5KnUlB9GTBB8AzbGOrrvN2M24r9L5F/taqWqojfLyESr8Q9W5E=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB3TCCAUagAwIBAgIQRliq6Y3zhL5M5z3NSNcb/jANBgkqhkiG9w0BAQsFADAtMSswKQYDVQQDHiIAUABDAC0AVABPAE0AQgBFAFUAWABcAE0AYQB4AGkAbQBlMB4XDTI0MDQxMTIxNDM0NFoXDTI1MDQxMjAzNDM0NFowLTErMCkGA1UEAx4iAFAAQwAtAFQATwBNAEIARQBVAFgAXABNAGEAeABpAG0AZTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAunUjdD/mN1tTteLTB8/ih5ahAuHDw/wxfb5N+mT52Eq2rMaoGQuYNl0/WIVcovEoccP33o5knv2zYOEMdfoc03pjut1jafsj1Xg0vXrL/giu5tMJWBpdgVWqW5KnUlB9GTBB8AzbGOrrvN2M24r9L5F/taqWqojfLyESr8Q9W5ECAwEAATANBgkqhkiG9w0BAQsFAAOBgQAe4T55OEZwfqG/GpMscIOzWKf1/nTFCEahYnAW/VmHT1t0svbuNAHgaxeA2VARnusLa1mfTbhu8OoX8sHqzVhMScsUokG9tSRwmemnSkx+qxIAq22obxi2y9nW7kIfr/Z7LkT/MH/TeNX3l431jyW9YMnXhUjHEAPCnCKmWs0FLA==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
+<publisherIdentity name="CN=PC-TOMBEUX\Maxime" issuerKeyHash="a98d8ce2a2e1ca3b9187c1987b93bdace1a4f4c1" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>2I01ZDXP2uklfrQwNGa85m478seQWG+fgEfZ8MDTu+w=</DigestValue></Reference></SignedInfo><SignatureValue>FOZxRqiZET2oNn58wOY7cebcF7F0ptJx8iumkQOfPSVLHFfWPTeH+rmOfvPeYpwDwdM60l8b9bT6Ctf1wwjwxZ2wmis+O/ZEl0ALVpvWD0gPSDZ9tGb8IzD1h3JJIJsjPc26rclFdcZOPjrzw9vKMEqA0sIHzbWhCwpx5fO9hdA=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>unUjdD/mN1tTteLTB8/ih5ahAuHDw/wxfb5N+mT52Eq2rMaoGQuYNl0/WIVcovEoccP33o5knv2zYOEMdfoc03pjut1jafsj1Xg0vXrL/giu5tMJWBpdgVWqW5KnUlB9GTBB8AzbGOrrvN2M24r9L5F/taqWqojfLyESr8Q9W5E=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="ecbbd3c0f0d947809f6f5890c7f23b6ee6bc663430b47e25e9dacf3564358dd8" Description="" Url=""><as:assemblyIdentity name="DofusItemPriceExcelRunner.exe" version="1.0.0.0" publicKeyToken="91c1589412c435f2" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=PC-TOMBEUX\Maxime</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>pQ2kE6PhA7MAJ9Rw72GfNuMFk4YMTbSDE3TAyUDQSp0=</DigestValue></Reference></SignedInfo><SignatureValue>ghG03Ez5742z/wMEnmJIEr2fdQu4tzR0bOPx7rpt2HyF2HHZUVv6772CpVR1rH7A8SHLz8rbQG1PFMNWypjN5NhOPj59YV997d0x5VvTWkcFETIMF8BPLJOBM9FSoqPhHCE1o9hRdcdOQ7NyvNTRUR1sgEnokxL9b53YWuooTDo=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>unUjdD/mN1tTteLTB8/ih5ahAuHDw/wxfb5N+mT52Eq2rMaoGQuYNl0/WIVcovEoccP33o5knv2zYOEMdfoc03pjut1jafsj1Xg0vXrL/giu5tMJWBpdgVWqW5KnUlB9GTBB8AzbGOrrvN2M24r9L5F/taqWqojfLyESr8Q9W5E=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB3TCCAUagAwIBAgIQRliq6Y3zhL5M5z3NSNcb/jANBgkqhkiG9w0BAQsFADAtMSswKQYDVQQDHiIAUABDAC0AVABPAE0AQgBFAFUAWABcAE0AYQB4AGkAbQBlMB4XDTI0MDQxMTIxNDM0NFoXDTI1MDQxMjAzNDM0NFowLTErMCkGA1UEAx4iAFAAQwAtAFQATwBNAEIARQBVAFgAXABNAGEAeABpAG0AZTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAunUjdD/mN1tTteLTB8/ih5ahAuHDw/wxfb5N+mT52Eq2rMaoGQuYNl0/WIVcovEoccP33o5knv2zYOEMdfoc03pjut1jafsj1Xg0vXrL/giu5tMJWBpdgVWqW5KnUlB9GTBB8AzbGOrrvN2M24r9L5F/taqWqojfLyESr8Q9W5ECAwEAATANBgkqhkiG9w0BAQsFAAOBgQAe4T55OEZwfqG/GpMscIOzWKf1/nTFCEahYnAW/VmHT1t0svbuNAHgaxeA2VARnusLa1mfTbhu8OoX8sHqzVhMScsUokG9tSRwmemnSkx+qxIAq22obxi2y9nW7kIfr/Z7LkT/MH/TeNX3l431jyW9YMnXhUjHEAPCnCKmWs0FLA==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
