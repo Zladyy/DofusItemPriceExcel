@@ -183,7 +183,7 @@ namespace DofusItemPriceExcelPj
             var book = excelApp.Workbooks.Open(_excelFilePath);
             var aggregatedSheet = WriteAggregatedSheet(book, histories);
             var chartSheet = GenerateCharts(book, aggregatedSheet, histories);
-            aggregatedSheet.Visible = XlSheetVisibility.xlSheetVeryHidden;
+            aggregatedSheet.Visible = XlSheetVisibility.xlSheetHidden;
             chartSheet.Activate();
         }
 
